@@ -17,22 +17,26 @@ namespace ReflectionTraining
             {
                 if (type.IsValueType && type.IsEnum == false)
                 {
-                    File file = new File("C:/dlloutputs/" + type.Name + ".cs");
+                    File file = new File("C:/dlloutputs/" + type.Name + ".php");
                     file.SetFile();
 
-                    File.WritetoLine("using System;");
+                    File.WritetoLine("<?php");
                     File.WritetoLine("");
-                    File.WritetoLine("namespace " + type.Namespace);
-                    File.WritetoLine("{");
+                    File.WritetoLine("namespace " + type.Namespace + ";");
+                    File.WritetoLine("include_once 'modelclass.php';");
+                    File.WritetoLine("");
 
-                    File.WritetoLine("  public struct " + type.Name);
+                    File.WritetoLine("  class " + type.Name + " extends Model");
                     File.WritetoLine("  {");
 
                     Field field = new Field(type.GetFields());
                     field.PrintFields();
+                    File.WritetoLine("");
+                    field.CreateTypesMethod();
 
                     File.WritetoLine("  };");
                     File.WritetoLine("}");
+                    File.WritetoLine("?>");
                     file.CloseConnection();
                 }
             }
