@@ -7,7 +7,7 @@
  */
 
 namespace Account;
-
+use Exception;
 
 class Validate
 {
@@ -16,7 +16,7 @@ class Validate
 
         foreach ($variables as $variable => $value){
             if (!property_exists($this, $variable)){
-                throw new \Exception("Unexpected property: $variable");
+                throw new Exception("Unexpected property: $variable");
             }
 
             $this->$variable = $value;
@@ -33,20 +33,27 @@ class Validate
 
     public function validateVariables(){
         $typeFunctionDatas = $this->_types();
+
         $getVariableTypes = get_object_vars($this);
 
         foreach ($typeFunctionDatas[0] as $functionVariable => $functionType){
 
             $parseFunction = explode('&',$functionType);
-            echo $parseFunction[0];
+
             $getFunctionType = $this->getType($getVariableTypes[$functionVariable]);
 
             if ($getFunctionType != $parseFunction[0]){
-                throw new \Exception("Unexpected type for: $functionVariable");
+                throw new Exception("Unexpected type for: $functionVariable");
             }
 
-            if (count($parseFunction) == 2){
-                $this->validateObjectArrays($getVariableTypes[$functionVariable], $parseFunction[1]);
+            if (count($parseFunction) >= 2){
+                if ($parseFunction[0] == "array"){
+                    $this->validateObjectArrays($getVariableTypes[$functionVariable], $parseFunction[1]);
+                }
+
+                if ($parseFunction[1] == "enum"){
+                    $this->validateEnum($getVariableTypes[$functionVariable], $parseFunction[2]);
+                }
             }
         }
     }
@@ -56,8 +63,16 @@ class Validate
             $getFunctionVarType = $this->getType($functionVar);
 
             if ($getFunctionVarType != $parseFunction){
-                throw new \Exception("aasdasdasdasd");
+                throw new Exception("Unexpected type for: $functionVariable [], expected: $getFunctionVarType");
             }
+        }
+    }
+
+    public function validateEnum($variableData, $path){
+        $enumVariableList = $path::_enums();
+
+        if (@$enumVariableList[$variableData] == null){
+            throw new Exception("Unexpected enum for: $variableData, in: $path");
         }
     }
 }
