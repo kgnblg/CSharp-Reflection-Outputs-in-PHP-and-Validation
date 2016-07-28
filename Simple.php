@@ -3,7 +3,7 @@
 namespace ReflectionOrnekClass;
 include_once 'modelclass.php';
 
-  class Simpleextends Model
+  class Simple extends Model
   {
   public $Position;
   public $Exists;
@@ -15,7 +15,6 @@ include_once 'modelclass.php';
       'Exists' => 'boolean',
       'LastValue' => 'double',
       ];
-}
-  };
-}
+  }
+  }
 ?>

@@ -56,60 +56,87 @@ namespace ReflectionTraining
             File.WritetoLine("<?php");
             File.WritetoLine("");
 
-            File.WritetoLine("namespace " + types[1].Namespace);
+            File.WritetoLine("namespace " + types[1].Namespace +";");
             File.WritetoLine("use Exception;");
             File.WritetoLine("");
             File.WritetoLine("class Model {");
             File.WritetoLine("");
 
             //Write Construct
-            File.Write(@"   public function __construct(array $props = null){
-        if ($props == null)
-            return;
-        foreach ($props as $prop => $value){
-                if (!property_exists($this, $prop))
+            File.Write(@"   public function __construct(array $variables = null){
+        if($variables == null){ return; }
+
+        foreach ($variables as $variable => $value){
+            if (!property_exists($this, $variable)){
 ");
-            File.WritetoLine("              throw new Exception(\"Unexpected property: $prop\");");
-            File.Write(@"   $this->$prop = $value;
-    }
+            File.WritetoLine("throw new Exception(\"Unexpected property: $variable\");");
+            File.Write(@"}
+
+            $this->$variable = $value;
+        }
 }
 ");
 
-            //Write Validate()
-            File.Write(@"   public function validate(){
-        $types = $this->_types();
-        $props = get_object_vars($this);
-        foreach($props as $prop => $value){
-            $expectedType = explode('`',$types[$prop]);
-            $type = $this->getType($value);
-            if($expectedType[0] != $type)
+            //Write getType()
+            File.Write(@"   private function getType($value){
+        $type = gettype($value);
+
+        if($type == 'object'){ return get_class($value); }
+
+        return $type;
+        }
 ");
-            File.WritetoLine("              throw new Exception(\"Unexpected type for: $prop\");");
-                    File.Write(@"       if (count($expectedType) == 2 && $expectedType[0] == 'array'){
-            $this->validateArray($value, $prop, $expectedType[1]);
-            }
+
+            //Write ValidateVariables()
+            File.Write(@"   public function validateVariables(){
+        $typeFunctionDatas = $this->_types();
+
+        $getVariableTypes = get_object_vars($this);
+
+        foreach ($typeFunctionDatas[0] as $functionVariable => $functionType){
+
+            $parseFunction = explode('&',$functionType);
+
+            $getFunctionType = $this->getType($getVariableTypes[$functionVariable]);
+
+            if ($getFunctionType != $parseFunction[0]){
+");
+            File.WritetoLine("throw new Exception(\"Unexpected type for: $functionVariable\");");
+            File.Write(@"}
+
+            if (count($parseFunction) >= 2){
+                if ($parseFunction[0] == 'array'){
+                    $this->validateArrays($getVariableTypes[$functionVariable], $parseFunction[1]);
+    }
+
+                if ($parseFunction[1] == 'enum'){
+                    $this->validateEnum($getVariableTypes[$functionVariable], $parseFunction[2]);
+    }
+}
         }
     }
 ");
 
-            //Write ValidateArray()
-            File.Write(@"   private function validateArray($values, $prop, $expectedType){
-        foreach ($values as $value){
-            $type = $this->getType($value);
-            if ($expectedType != $type)
-");
-            File.WritetoLine("              throw new Exception(\"Unexpected type for: $prop [], expected: $expectedType, was: $type\");");
-            File.Write(@"       }
-    }
-");
+            //Write ValidateArrays()
+            File.Write(@"   public function validateArrays($functionVariable, $parseFunction){
+        foreach ($functionVariable as $functionVar){
+            $getFunctionVarType = $this->getType($functionVar);
 
-            //Write GetType()
-            File.Write(@"   private function getType($value){
-        $type = gettype($value);
-        if ($type == 'object')
-            return get_class($value);
-        return $type;
+            if ($getFunctionVarType != $parseFunction){
+");
+            File.WritetoLine("throw new Exception(\"Unexpected type for: $functionVariable[], expected: $getFunctionVarType\");");
+            File.Write(@"}
     }
+}
+");
+            File.Write(@"public function validateEnum($variableData, $path){
+        $enumVariableList = $path::_enums();
+
+        if (@$enumVariableList[$variableData] == null){
+");
+            File.Write("throw new Exception(\"Unexpected enum for: $variableData, in: $path\");");
+        File.Write(@"}
+}
 ");
 
             File.WritetoLine("}");

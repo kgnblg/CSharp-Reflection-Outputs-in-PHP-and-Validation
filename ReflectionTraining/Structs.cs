@@ -34,8 +34,7 @@ namespace ReflectionTraining
                     File.WritetoLine("");
                     field.CreateTypesMethod();
 
-                    File.WritetoLine("  };");
-                    File.WritetoLine("}");
+                    File.WritetoLine("  }");
                     File.WritetoLine("?>");
                     file.CloseConnection();
                 }

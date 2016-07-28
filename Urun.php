@@ -15,7 +15,7 @@ class Urun extends Model
       'urunad' => 'string',
       'stok' => 'integer',
       ];
-}
+  }
 
   public function getUrunkod() {
   return $this->urunkod;

@@ -32,7 +32,7 @@ namespace ReflectionTraining
             }
 
             File.WritetoLine("      ];");
-            File.WritetoLine("}");
+            File.WritetoLine("  }");
         }
     }
 }

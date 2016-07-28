@@ -28,15 +28,14 @@ namespace ReflectionTraining
                     File.WritetoLine("  class " + type.Name);
                     File.WritetoLine("  {");
 
-                    string[] enumvalues = type.GetEnumNames();
-
+                    var enumvalues = type.GetEnumValues();
+                    type.GetEnumUnderlyingType();
                     foreach (var value in enumvalues)
                     {
-                        File.WritetoLine("  const "+value+";");
+                        File.WritetoLine("  const " + value.ToString() + " = " + (int)value + ";");
                     }
 
                     File.WritetoLine("  }");
-                    File.WritetoLine("}");
                     File.WritetoLine("?>");
                     file.CloseConnection();
                 }

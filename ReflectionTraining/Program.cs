@@ -19,9 +19,6 @@ namespace ReflectionTraining
             Structs structs = new Structs(classtypes);
             structs.PrintIt();
 
-           // ModelClass modelclass = new ModelClass(classtypes);
-            //modelclass.Creator();
-
             Console.ReadKey();
         }
     }
