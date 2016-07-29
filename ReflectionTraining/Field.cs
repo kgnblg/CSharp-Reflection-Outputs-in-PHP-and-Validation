@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace ReflectionTraining
 {
@@ -17,22 +16,6 @@ namespace ReflectionTraining
             {
                 File.WritetoLine("  public $"+field.Name+";");
             }
-        }
-
-        public void CreateTypesMethod()
-        {
-            File.WritetoLine("  public function _types() {");
-            File.WritetoLine("      return [");
-
-            foreach (var field in fieldinfo)
-            {
-                string typeresult = TypeFinder.FindType(field);
-
-                File.WritetoLine("      '" + field.Name + "' => '" + typeresult + "',");
-            }
-
-            File.WritetoLine("      ];");
-            File.WritetoLine("  }");
         }
     }
 }

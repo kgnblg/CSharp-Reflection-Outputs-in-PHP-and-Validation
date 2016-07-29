@@ -17,11 +17,10 @@ namespace ReflectionTraining
             {
                 if (type.IsValueType && type.IsEnum == false)
                 {
-                    File file = new File("C:/dlloutputs/" + type.Name + ".php");
+                    File file = new File(type.Name);
                     file.SetFile();
-
-                    File.WritetoLine("<?php");
-                    File.WritetoLine("");
+                    file.PrintHeader();
+                    
                     File.WritetoLine("namespace " + type.Namespace + ";");
                     File.WritetoLine("include_once 'modelclass.php';");
                     File.WritetoLine("");
@@ -32,10 +31,11 @@ namespace ReflectionTraining
                     Field field = new Field(type.GetFields());
                     field.PrintFields();
                     File.WritetoLine("");
-                    field.CreateTypesMethod();
+
+                    TypeWriter typewrite = new TypeWriter(type.GetFields());
+                    typewrite.CreateTypesFunction();
 
                     File.WritetoLine("  }");
-                    File.WritetoLine("?>");
                     file.CloseConnection();
                 }
             }

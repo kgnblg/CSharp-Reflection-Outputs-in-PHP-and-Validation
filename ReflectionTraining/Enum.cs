@@ -17,11 +17,10 @@ namespace ReflectionTraining
             {
                 if (type.IsEnum)
                 {
-                    File file = new File("C:/dlloutputs/" + type.Name + ".php");
+                    File file = new File(type.Name);
                     file.SetFile();
+                    file.PrintHeader();
 
-                    File.WritetoLine("<?php");
-                    File.WritetoLine("");
                     File.WritetoLine("namespace " + type.Namespace + ";");
                     File.WritetoLine("");
 
@@ -35,8 +34,19 @@ namespace ReflectionTraining
                         File.WritetoLine("  const " + value.ToString() + " = " + (int)value + ";");
                     }
 
+                    File.WritetoLine("");
+                    File.WritetoLine("      public static function _enums() {");
+                    File.WritetoLine("          return array ([");
+
+                    foreach (var value in enumvalues)
+                    {
+                        File.WritetoLine("          '" + (int)value + "' => '" + value.ToString() + "',");
+                    }
+
+                    File.WritetoLine("          ]);");
+                    File.WritetoLine("      }");
+
                     File.WritetoLine("  }");
-                    File.WritetoLine("?>");
                     file.CloseConnection();
                 }
             }

@@ -10,7 +10,7 @@ namespace ReflectionTraining
                 
         public File(string filelocation)
         {
-            this.filelocation = filelocation;
+            this.filelocation = "C:/dlloutputs/" + filelocation + ".php";
         }
 
         public void SetFile()
@@ -29,8 +29,15 @@ namespace ReflectionTraining
             streamwriter.Write(writedata);
         }
 
+        public void PrintHeader()
+        {
+            WritetoLine("<?php");
+            WritetoLine("");
+        }
+
         public void CloseConnection()
         {
+            WritetoLine("?>");
             streamwriter.Close();
             filestream.Close();
         }
