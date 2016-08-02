@@ -9,6 +9,9 @@ class Ogrenci extends Model
   public $soyad;
   public $kgnblg;
   public $asdasdasd;
+  public $listeys;
+  public $zgn;
+  public $testlist;
   public $haha;
   public $kagan;
 
@@ -20,11 +23,20 @@ class Ogrenci extends Model
       'soyad' => 'string',
       'kgnblg' => 'array&integer',
       'asdasdasd' => 'integer',
+      'listeys' => 'array&single&string',
+      'zgn' => 'array&string&integer',
+      'testlist' => 'array&single&integer',
       'haha' => 'ReflectionOrnekClass\Urun',
       'kagan' => 'integer&enum&ReflectionOrnekClass\Candidates',
       'ad' => 'string',
       'soyad' => 'string',
       ];
+  }
+}
+?>
+  }
+}
+?>
   }
 }
 ?>

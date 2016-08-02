@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace ReflectionTraining
 {
@@ -9,7 +10,7 @@ namespace ReflectionTraining
         {
             this.fieldinfo = fieldinfo;
         }
-
+        
         public void PrintFields()
         {
             foreach (var field in fieldinfo)

@@ -28,23 +28,13 @@ namespace ReflectionTraining
                     File.WritetoLine("  {");
 
                     var enumvalues = type.GetEnumValues();
-                    type.GetEnumUnderlyingType();
+
                     foreach (var value in enumvalues)
                     {
                         File.WritetoLine("  const " + value.ToString() + " = " + (int)value + ";");
                     }
 
-                    File.WritetoLine("");
-                    File.WritetoLine("      public static function _enums() {");
-                    File.WritetoLine("          return array ([");
-
-                    foreach (var value in enumvalues)
-                    {
-                        File.WritetoLine("          '" + (int)value + "' => '" + value.ToString() + "',");
-                    }
-
-                    File.WritetoLine("          ]);");
-                    File.WritetoLine("      }");
+                    TypeWriter.CreateEnumsFunction(enumvalues);
 
                     File.WritetoLine("  }");
                     file.CloseConnection();

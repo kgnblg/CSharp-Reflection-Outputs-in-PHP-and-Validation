@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace ReflectionTraining
 {
@@ -42,6 +43,21 @@ namespace ReflectionTraining
             
             File.WritetoLine("      ];");
             File.WritetoLine("  }");
+        }
+
+        public static void CreateEnumsFunction(Array enumvalues)
+        {
+            File.WritetoLine("");
+            File.WritetoLine("      public static function _enums() {");
+            File.WritetoLine("          return array ([");
+
+            foreach (var value in enumvalues)
+            {
+                File.WritetoLine("          '" + (int)value + "' => '" + value.ToString() + "',");
+            }
+
+            File.WritetoLine("          ]);");
+            File.WritetoLine("      }");
         }
     }
 }
