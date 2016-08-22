@@ -1,12 +1,13 @@
-﻿using System.Reflection;
+﻿using CSharpReflection;
+using System.Collections.Generic;
 
 namespace ReflectionTraining
 {
     class Property
     {
-        PropertyInfo [] propertyinfo { get; set; }
+        List<PropertyElements> propertyinfo { get; set; }
 
-        public Property(PropertyInfo [] propertyinfo)
+        public Property(List<PropertyElements> propertyinfo)
         {
             this.propertyinfo = propertyinfo;
         }
@@ -15,7 +16,7 @@ namespace ReflectionTraining
         {
             foreach (var property in propertyinfo)
             {
-                File.WritetoLine("  public $" + property.Name.ToLower() + ";");
+                File.WritetoLine("  public $" + property.propertyName.ToLower() + ";");
             }
         }
     }

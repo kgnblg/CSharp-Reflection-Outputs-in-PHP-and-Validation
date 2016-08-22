@@ -1,45 +1,66 @@
-﻿using System;
+﻿using CSharpReflection;
+using System.Collections.Generic;
 
 namespace ReflectionTraining
 {
-    class Enum: ITypes
+    class Enum
     {
-        public Type [] types { get; set; }
+        public List<EnumElements> enumelements { get; set; }
 
-        public Enum(Type [] types)
+        public Enum(List<EnumElements> enumelements)
         {
-            this.types = types;
+            this.enumelements = enumelements;
         }
 
-        public void PrintIt()
+        public void PrintEnumBody()
         {
-            foreach (var type in types)
+            foreach (var enumelement in enumelements)
             {
-                if (type.IsEnum)
+                PrintEnumHeader(enumelement);
+
+                foreach (var value in enumelement.enumFields)
                 {
-                    File file = new File(type.Name);
-                    file.SetFile();
-                    file.PrintHeader();
-
-                    File.WritetoLine("namespace " + type.Namespace + ";");
-                    File.WritetoLine("");
-
-                    File.WritetoLine("  class " + type.Name);
-                    File.WritetoLine("  {");
-
-                    var enumvalues = type.GetEnumValues();
-
-                    foreach (var value in enumvalues)
-                    {
-                        File.WritetoLine("  const " + value.ToString() + " = " + (int)value + ";");
-                    }
-
-                    TypeWriter.CreateEnumsFunction(enumvalues);
-
-                    File.WritetoLine("  }");
-                    file.CloseConnection();
+                    File.WritetoLine("  const " + value.enumValue + " = " + value.enumNumberValue + ";");
                 }
+
+                PrintEnumsFunction(enumelement.enumFields);
+
+                PrintEnumFooter();
             }
+        }
+
+        public void PrintEnumHeader(EnumElements enumelement)
+        {
+            File file = new File(enumelement.enumName);
+            file.SetFile();
+            file.PrintHeader();
+
+            File.WritetoLine("namespace " + enumelement.enumNamespace + ";");
+            File.WritetoLine("");
+
+            File.WritetoLine("  class " + enumelement);
+            File.WritetoLine("  {");
+        }
+
+        public void PrintEnumFooter()
+        {
+            File.WritetoLine("  }");
+            File.CloseConnection();
+        }
+
+        public void PrintEnumsFunction(List<EnumFields> enumfields)
+        {
+            File.WritetoLine("");
+            File.WritetoLine("      public static function _enums() {");
+            File.WritetoLine("          return array ([");
+
+            foreach (var value in enumfields)
+            {
+                File.WritetoLine("          '" + value.enumNumberValue + "' => '" + value.enumValue + "',");
+            }
+
+            File.WritetoLine("          ]);");
+            File.WritetoLine("      }");
         }
     }
 }

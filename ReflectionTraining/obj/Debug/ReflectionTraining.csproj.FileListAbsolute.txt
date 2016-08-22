@@ -10,3 +10,5 @@ C:\Users\KGN\Documents\Visual Studio 2015\Projects\ReflectionTrainingPHP\Reflect
 C:\Users\KGN\Documents\Visual Studio 2015\Projects\ReflectionTrainingPHP\ReflectionTraining\bin\Debug\ReflectionTraining.exe
 C:\Users\KGN\Documents\Visual Studio 2015\Projects\ReflectionTrainingPHP\ReflectionTraining\bin\Debug\ReflectionTraining.pdb
 C:\Users\KGN\Documents\Visual Studio 2015\Projects\ReflectionTrainingPHP\ReflectionTraining\obj\Debug\ReflectionTraining.csprojResolveAssemblyReference.cache
+C:\Users\KGN\Documents\Visual Studio 2015\Projects\ReflectionTrainingPHP\ReflectionTraining\bin\Debug\RefTeamWork.dll
+C:\Users\KGN\Documents\Visual Studio 2015\Projects\ReflectionTrainingPHP\ReflectionTraining\bin\Debug\RefTeamWork.pdb

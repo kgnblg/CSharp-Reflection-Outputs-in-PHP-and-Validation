@@ -1,44 +1,53 @@
-﻿using System;
+﻿using CSharpReflection;
+using System.Collections.Generic;
 
 namespace ReflectionTraining
 {
-    class Structs: ITypes
+    class Structs
     {
-        public Type[] types { get; set; }
+        public List<StructElements> structelements { get; set; }
 
-        public Structs(Type[] types)
+        public Structs(List<StructElements> structelements)
         {
-            this.types = types;
+            this.structelements = structelements;
         }
 
-        public void PrintIt()
+        public void PrintStructBody()
         {
-            foreach (var type in types)
+            foreach (var structelement in structelements)
             {
-                if (type.IsValueType && type.IsEnum == false)
-                {
-                    File file = new File(type.Name);
-                    file.SetFile();
-                    file.PrintHeader();
-                    
-                    File.WritetoLine("namespace " + type.Namespace + ";");
-                    File.WritetoLine("include_once 'modelclass.php';");
-                    File.WritetoLine("");
+                PrintStructHeader(structelement);
 
-                    File.WritetoLine("  class " + type.Name + " extends Model");
-                    File.WritetoLine("  {");
+                Field field = new Field(structelement.structFields);
+                field.PrintFields();
 
-                    Field field = new Field(type.GetFields());
-                    field.PrintFields();
-                    File.WritetoLine("");
+                TypeWriter typewriter = new TypeWriter(structelement.structFields);
+                typewriter.PrintTypesFunction();
 
-                    TypeWriter typewrite = new TypeWriter(type.GetFields());
-                    typewrite.CreateTypesFunction();
-
-                    File.WritetoLine("  }");
-                    file.CloseConnection();
-                }
+                PrintStructFooter();
             }
         }
+
+        public void PrintStructHeader(StructElements structvariable)
+        {
+            File file = new File(structvariable.structName);
+            file.SetFile();
+            file.PrintHeader();
+
+            File.WritetoLine("namespace " + structvariable.structNamespace + ";");
+            File.WritetoLine("include_once 'Validate.php';");
+            File.WritetoLine("");
+
+            File.WritetoLine("  class " + structvariable.structName + " extends Validate");
+            File.WritetoLine("  {");
+        }
+
+        public void PrintStructFooter()
+        {
+            File.WritetoLine("  }");
+            File.CloseConnection();
+        }
+
+
     }
 }

@@ -48,10 +48,21 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
         $this->expectOutputString('');
     }
 
-    public function testValidateArrays()
+    public function testSingleValidateArrays()
     {
         $tester = new Validate();
         $tester->validateArrays(array(0, 1, 2),"integer");
+
+        $this->expectOutputString('');
+    }
+
+    public function testValidateMultipleArrays()
+    {
+        $tester = new Validate();
+        $tester->validateMultipleArrays(array([
+            'asd' => 'kgn',
+            'abc' => 'qwe'
+        ]), "string", "string");
 
         $this->expectOutputString('');
     }
@@ -64,3 +75,4 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
         $this->expectOutputString('');
     }
 }
+?>

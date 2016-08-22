@@ -35,7 +35,7 @@ namespace ReflectionTraining
             WritetoLine("");
         }
 
-        public void CloseConnection()
+        public static void CloseConnection()
         {
             WritetoLine("?>");
             streamwriter.Close();

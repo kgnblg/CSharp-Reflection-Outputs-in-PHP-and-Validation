@@ -23,7 +23,7 @@ class Validate
         }
     }
 
-    private function getType($value){
+    public function getType($value){
         $type = gettype($value);
 
         if($type == "object"){ return get_class($value); }
@@ -48,7 +48,12 @@ class Validate
 
             if (count($parseFunction) >= 2){
                 if ($parseFunction[0] == "array"){
-                    $this->validateObjectArrays($getVariableTypes[$functionVariable], $parseFunction[1]);
+                    if ($parseFunction[1] == "single")
+                    {
+                        $this->validateSingleArrays($getVariableTypes[$functionVariable], $parseFunction[2]);
+                    }else{
+                        $this->validateMultipleArrays($getVariableTypes[$functionVariable], $parseFunction[2], $parseFunction[3]);
+                    }
                 }
 
                 if ($parseFunction[1] == "enum"){
@@ -58,7 +63,7 @@ class Validate
         }
     }
 
-    public function validateObjectArrays($functionVariable, $parseFunction){
+    public function validateSingleArrays($functionVariable, $parseFunction){
         foreach ($functionVariable as $functionVar){
             $getFunctionVarType = $this->getType($functionVar);
 
@@ -68,10 +73,25 @@ class Validate
         }
     }
 
+    public function validateMultipleArrays($functionVariable, $firstVariableType, $secondVariableType){
+        foreach ($functionVariable as $functionName => $functionInside){
+            $getFirstType = $this->getType($functionName);
+            $getSecondType = $this->getType($functionInside);
+
+            if ($getFirstType != $firstVariableType){
+                throw new Exception("Unexpected Type for: $functionVariable [] multiple array, expected $firstVariableType");
+            }
+
+            if ($getSecondType != $secondVariableType){
+                throw new Exception("Unexpected Type for: $functionVariable [] multiple array, expected $secondVariableType");
+            }
+        }
+    }
+
     public function validateEnum($variableData, $path){
         $enumVariableList = $path::_enums();
 
-        if (@$enumVariableList[$variableData] == null){
+        if (@$enumVariableList[0][$variableData] == null){
             throw new Exception("Unexpected enum for: $variableData, in: $path");
         }
     }

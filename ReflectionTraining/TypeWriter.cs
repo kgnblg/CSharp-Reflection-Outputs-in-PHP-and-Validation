@@ -1,63 +1,85 @@
-﻿using System;
-using System.Reflection;
+﻿using CSharpReflection;
+using System.Collections.Generic;
 
 namespace ReflectionTraining
 {
     class TypeWriter
     {
-        public FieldInfo[] fieldinfo { get; set; }
-        public PropertyInfo [] propertyinfo { get; set; }
+        public List<FieldElements> fieldelements { get; set; }
+        public List<PropertyElements> propertyelements { get; set; }
 
-        public TypeWriter(FieldInfo[] fieldinfo)
+        public TypeWriter(List<FieldElements> fieldelements)
         {
-            this.fieldinfo = fieldinfo;
+            this.fieldelements = fieldelements;
         }
 
-        public TypeWriter(FieldInfo [] fieldinfo, PropertyInfo [] propertyinfo)
+        public TypeWriter(List<FieldElements> fieldelements, List<PropertyElements> propertyelements)
         {
-            this.fieldinfo = fieldinfo;
-            this.propertyinfo = propertyinfo;
+            this.fieldelements = fieldelements;
+            this.propertyelements = propertyelements;
         }
 
-        public void CreateTypesFunction()
+        public void PrintTypesFunction()
+        {
+            PrintTypesFunctionHeader();
+
+            FieldSeperator fieldseperator = new FieldSeperator(fieldelements);
+            fieldseperator.SeperateFields();
+
+            List<FieldElements> normalfields = fieldseperator.normalFields;
+            List<FieldElements> genericfields = fieldseperator.genericFields;
+
+            foreach (var field in normalfields)
+            {
+                string typeresult = TypeFinder.FindTypeforNormalFields(field);
+
+                File.WritetoLine("      '" + field.fieldName + "' => '" + typeresult + "',");
+            }
+
+            foreach (var field in genericfields)
+            {
+                string typeresult = TypeFinder.FindTypeforGenericFields(field);
+
+                File.WritetoLine("      '" + field.fieldName + "' => '" + typeresult + "',");
+            }
+
+
+            if (propertyelements != null)
+            {
+                PropertySeperator propertyseperator = new PropertySeperator(propertyelements);
+                propertyseperator.SeperatePropertys();
+
+                List<PropertyElements> normalpropertys = propertyseperator.normalPropertys;
+                List<PropertyElements> genericpropertys = propertyseperator.genericPropertys;
+
+                foreach (var property in normalpropertys)
+                {
+                    string typeresult = TypeFinder.FindTypeforNormalPropertys(property);
+
+                    File.WritetoLine("      '" + property.propertyName + "' => '" + typeresult + "',");
+                }
+
+                foreach (var property in genericpropertys)
+                {
+                    string typeresult = TypeFinder.FindTypeforGenericPropertys(property);
+
+                    File.WritetoLine("      '" + property.propertyName + "' => '" + typeresult + "',");
+                }
+            }
+
+            PrintTypesFunctionFooter();
+        }
+
+        public void PrintTypesFunctionHeader()
         {
             File.WritetoLine("  public function _types() {");
             File.WritetoLine("      return [");
-
-            foreach (var field in fieldinfo)
-            {
-                string typeresult = TypeFinder.FindTypeforField(field);
-
-                File.WritetoLine("      '" + field.Name + "' => '" + typeresult + "',");
-            }
-
-            if (propertyinfo != null)
-            {
-                foreach (var property in propertyinfo)
-                {
-                    string propertytype = TypeFinder.FindTypeforProperty(property);
-
-                    File.WritetoLine("      '" + property.Name.ToLower() + "' => '" + propertytype + "',");
-                }
-            }
-            
-            File.WritetoLine("      ];");
-            File.WritetoLine("  }");
         }
 
-        public static void CreateEnumsFunction(Array enumvalues)
+        public void PrintTypesFunctionFooter()
         {
-            File.WritetoLine("");
-            File.WritetoLine("      public static function _enums() {");
-            File.WritetoLine("          return array ([");
-
-            foreach (var value in enumvalues)
-            {
-                File.WritetoLine("          '" + (int)value + "' => '" + value.ToString() + "',");
-            }
-
-            File.WritetoLine("          ]);");
-            File.WritetoLine("      }");
+            File.WritetoLine("      ];");
+            File.WritetoLine("  }");
         }
     }
 }

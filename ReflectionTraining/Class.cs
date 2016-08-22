@@ -1,60 +1,68 @@
-﻿using System;
+﻿using CSharpReflection;
+using System.Collections.Generic;
 
 namespace ReflectionTraining
 {
-    class Class: ITypes
+    class Class
     {
-        public Type[] types { get; set; }
+        public List<ClassElements> classelements { get; set; }
 
-        public Class(Type [] types)
+        public Class(List<ClassElements> classelements)
         {
-            this.types = types;
+            this.classelements = classelements;
         }
 
-        public void PrintIt()
+        public void PrintClassBody()
         {
-            foreach (var type in types)
+            foreach (var classelement in classelements)
             {
-                if (type.IsClass)
-                {
-                    File file = new File(type.Name);
-                    file.SetFile();
-                    file.PrintHeader();
+                PrintClassHeader(classelement);
 
-                    File.WritetoLine("namespace " + type.Namespace+";");
-                    File.WritetoLine("include_once 'modelclass.php';");
-                    File.WritetoLine("");
+                Field field = new Field(classelement.classFields);
+                field.PrintFields();
 
-                    File.WritetoLine("class " + type.Name + " extends Model");
-                    File.WritetoLine("{");
+                File.WritetoLine("");
 
-                    Field field = new Field(type.GetFields());
-                    field.PrintFields();
+                Property property = new Property(classelement.classPropertys);
+                property.PrintPropertys();
 
-                    File.WritetoLine("");
+                TypeWriter typewriter = new TypeWriter(classelement.classFields, classelement.classPropertys);
+                typewriter.PrintTypesFunction();
 
-                    Property property = new Property(type.GetProperties());
-                    property.PrintPropertys();
-
-                    TypeWriter typewrite = new TypeWriter(type.GetFields(), type.GetProperties());
-                    typewrite.CreateTypesFunction();
-
-                    File.WritetoLine("}");
-                    file.CloseConnection();
-                }
+                PrintClassFooter();
             }
+        }
+
+        public void PrintClassHeader(ClassElements classelement)
+        {
+            File file = new File(classelement.className);
+            file.SetFile();
+            file.PrintHeader();
+
+            File.WritetoLine("namespace " + classelement.classNamespace + ";");
+            File.WritetoLine("include_once 'Validate.php';");
+            File.WritetoLine("");
+
+            File.WritetoLine("class " + classelement.className + " extends Validate");
+            File.WritetoLine("{");
+        }
+
+        public void PrintClassFooter()
+        {
+            File.WritetoLine("}");
+            File.CloseConnection();
         }
 
         public void CreateModelClass()
         {
-            File file = new File("modelclass");
+            File file = new File("Validate");
             file.SetFile();
             file.PrintHeader();
 
-            File.WritetoLine("namespace " + types[1].Namespace +";");
+            File.WritetoLine("namespace " + classelements[0].classNamespace +";");
             File.WritetoLine("use Exception;");
             File.WritetoLine("");
-            File.WritetoLine("class Model {");
+            File.WritetoLine("class Validate {");
 
             //Write Construct
             File.Write(@"       public function __construct(array $variables = null){
@@ -135,7 +143,7 @@ namespace ReflectionTraining
 ");
 
             File.WritetoLine("}");
-            file.CloseConnection();
+            File.CloseConnection();
         }
     }
 }

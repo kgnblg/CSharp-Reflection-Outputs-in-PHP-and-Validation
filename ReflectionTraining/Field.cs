@@ -1,21 +1,21 @@
-﻿using System;
-using System.Reflection;
+﻿using CSharpReflection;
+using System.Collections.Generic;
 
 namespace ReflectionTraining
 {
     class Field
     {
-        public FieldInfo [] fieldinfo { get; set; }
-        public Field(FieldInfo [] fieldinfo)
+        List<FieldElements> fieldelements { get; set; }
+        public Field(List<FieldElements> fieldelements)
         {
-            this.fieldinfo = fieldinfo;
+            this.fieldelements = fieldelements;
         }
         
         public void PrintFields()
         {
-            foreach (var field in fieldinfo)
+            foreach (var field in fieldelements)
             {
-                File.WritetoLine("  public $"+field.Name+";");
+                File.WritetoLine("  public $" + field.fieldName + ";");
             }
         }
     }

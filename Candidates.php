@@ -2,7 +2,7 @@
 
 namespace ReflectionOrnekClass;
 
-  class Candidates
+  class CSharpReflection.EnumElements
   {
   const Obama = 2;
   const MacCaine = 3;

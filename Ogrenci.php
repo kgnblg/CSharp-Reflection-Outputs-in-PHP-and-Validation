@@ -1,9 +1,9 @@
 <?php
 
 namespace ReflectionOrnekClass;
-include_once 'modelclass.php';
+include_once 'Validate.php';
 
-class Ogrenci extends Model
+class Ogrenci extends Validate
 {
   public $ad;
   public $soyad;
@@ -12,6 +12,7 @@ class Ogrenci extends Model
   public $listeys;
   public $zgn;
   public $testlist;
+  public $asd;
   public $haha;
   public $kagan;
 
@@ -21,22 +22,31 @@ class Ogrenci extends Model
       return [
       'ad' => 'string',
       'soyad' => 'string',
-      'kgnblg' => 'array&integer',
+      'kgnblg' => 'array&single&System\Int32[]',
+      'asd' => 'string',
+      'haha' => 'object&ReflectionOrnekClass\Urun',
+      'kagan' => 'integer&enum&ReflectionOrnekClass\Candidates',
       'asdasdasd' => 'integer',
       'listeys' => 'array&single&string',
-      'zgn' => 'array&string&integer',
+      'zgn' => 'array&multiple&string&integer',
       'testlist' => 'array&single&integer',
-      'haha' => 'ReflectionOrnekClass\Urun',
-      'kagan' => 'integer&enum&ReflectionOrnekClass\Candidates',
-      'ad' => 'string',
-      'soyad' => 'string',
+      'Ad' => 'string',
+      'Soyad' => 'string',
       ];
   }
 }
 ?>
+];
   }
 }
 ?>
+=> 'object&System\String',
+      ];
+  }
+}
+?>
+em\String',
+      ];
   }
 }
 ?>

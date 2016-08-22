@@ -1,9 +1,9 @@
 <?php
 
 namespace ReflectionOrnekClass;
-include_once 'modelclass.php';
+include_once 'Validate.php';
 
-class Urun extends Model
+class Urun extends Validate
 {
   public $urunkod;
   public $urunad;
@@ -17,11 +17,20 @@ class Urun extends Model
       'urunkod' => 'string',
       'urunad' => 'string',
       'stok' => 'integer',
-      'urunkod' => 'string',
-      'urunad' => 'string',
-      'stok' => 'integer',
+      'Urunkod' => 'string',
+      'Urunad' => 'string',
+      'Stok' => 'integer',
       ];
   }
 }
 ?>
+er',
+      ];
+  }
+}
+?>
+er',
+      ];
+  }
+}
 ?>
